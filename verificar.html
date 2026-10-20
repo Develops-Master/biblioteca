@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificar diploma · SIGIE</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{ --azul:#14304d; --ok:#1b7f3b; --mal:#b3261e; --aviso:#9a6700; --fondo:#f3f5f8; --tarjeta:#fff; --texto:#1a1a1a; --suave:#5b6573; }
+  @media (prefers-color-scheme: dark){ :root{ --fondo:#0f141b; --tarjeta:#18202b; --texto:#eef1f5; --suave:#9aa5b4; --azul:#8fb4de; --ok:#5fd07f; --mal:#ff8b82; --aviso:#e7b955; } }
+  *{ box-sizing:border-box }
+  body{ margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; background:var(--fondo); color:var(--texto); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px }
+  main{ width:100%; max-width:460px; background:var(--tarjeta); border-radius:16px; box-shadow:0 6px 28px rgba(0,0,0,.12); padding:26px 22px }
+  h1{ font-size:20px; margin:0 0 4px; color:var(--azul) }
+  p.sub{ margin:0 0 18px; color:var(--suave); font-size:14px }
+  form{ display:flex; gap:8px }
+  input{ flex:1; min-width:0; font:600 18px ui-monospace,Consolas,monospace; letter-spacing:1px; text-transform:uppercase; padding:11px 12px; border:1px solid #9aa5b4; border-radius:10px; background:transparent; color:inherit }
+  button{ font:600 15px system-ui,sans-serif; padding:0 18px; border:0; border-radius:10px; background:var(--azul); color:#fff; cursor:pointer }
+  @media (prefers-color-scheme: dark){ button{ color:#0f141b } }
+  #res{ margin-top:18px; border-radius:12px; padding:16px; display:none; line-height:1.5 }
+  #res.ok{ display:block; border:2px solid var(--ok) } #res.mal{ display:block; border:2px solid var(--mal) } #res.aviso{ display:block; border:2px solid var(--aviso) }
+  #res .estado{ font-size:19px; font-weight:700; margin-bottom:8px }
+  #res.ok .estado{ color:var(--ok) } #res.mal .estado{ color:var(--mal) } #res.aviso .estado{ color:var(--aviso) }
+  dl{ margin:0; display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:15px } dt{ color:var(--suave) } dd{ margin:0; font-weight:600; word-break:break-word }
+  small{ display:block; margin-top:16px; color:var(--suave); font-size:12px }
+</style>
+</head>
+<body>
+<main>
+  <h1>🎓 Verificar diploma</h1>
+  <p class="sub">Escribe el código impreso en el diploma (o escanea su QR).</p>
+  <form id="f" autocomplete="off">
+    <input id="c" placeholder="D-XXXX-XXXX" maxlength="40" aria-label="Código del diploma" inputmode="text" autocapitalize="characters" spellcheck="false">
+    <button type="submit">Verificar</button>
+  </form>
+  <div id="res" role="status" aria-live="polite"></div>
+  <small>Por privacidad solo se muestra el nombre parcialmente. Si el resultado no coincide con el diploma que tienes en mano, consulta en la biblioteca del colegio.</small>
+</main>
+<script>
+(function(){
+  var $c = document.getElementById('c'), $res = document.getElementById('res');
+  function fila(dl, k, v){ if(!v) return; var dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = k; dd.textContent = v; dl.appendChild(dt); dl.appendChild(dd); }
+  function mostrar(clase, titulo, datos, mensaje){
+    $res.className = clase; $res.textContent = '';
+    var t = document.createElement('div'); t.className = 'estado'; t.textContent = titulo; $res.appendChild(t);
+    if(mensaje){ var m = document.createElement('div'); m.textContent = mensaje; $res.appendChild(m); }
+    if(datos){ var dl = document.createElement('dl'); datos.forEach(function(p){ fila(dl, p[0], p[1]); }); $res.appendChild(dl); }
+  }
+  function verificar(codigo){
+    mostrar('aviso', 'Consultando…');
+    fetch('/api/verificar?c=' + encodeURIComponent(codigo), { cache:'no-store' }).then(function(r){ return r.json(); }).then(function(d){
+      if(d && d.valido) mostrar('ok', '✔ Diploma auténtico', [['Institución', d.institucion], ['Diploma', d.titulo], ['A nombre de', d.nombre], ['Fecha', d.fecha], ['Folio', d.folio], ['Código', d.codigo]]);
+      else if(d && d.motivo === 'anulado') mostrar('mal', '✖ Diploma anulado', [['Código', d.codigo], ['Institución', d.institucion]], d.mensaje);
+      else if(d && d.mensaje) mostrar('mal', '✖ No se pudo verificar', null, d.mensaje);
+      else mostrar('mal', '✖ No se pudo verificar', null, (d && d.error) || 'Respuesta inesperada del servidor.');
+    }).catch(function(){ mostrar('mal', 'Sin conexión', null, 'No se pudo comunicar con el servidor de la biblioteca. Verifica que estás en la red del colegio.'); });
+  }
+  document.getElementById('f').addEventListener('submit', function(e){ e.preventDefault(); if($c.value.trim()) verificar($c.value.trim()); });
+  var q = new URLSearchParams(location.search).get('c');
+  if(q){ $c.value = q; verificar(q); }
+})();
+</script>
+</body>
+</html>

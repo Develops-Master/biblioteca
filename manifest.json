@@ -1,0 +1,18 @@
+{
+  "name": "SIGIE - Biblioteca Escolar",
+  "short_name": "SIGIE",
+  "description": "Biblioteca escolar: catálogo, préstamos con escáner, reservas, lectores y carnés, inventario por estante, reportes UGEL.",
+  "version": "28.0.0",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14304d",
+  "theme_color": "#14304d",
+  "orientation": "any",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

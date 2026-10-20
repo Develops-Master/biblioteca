@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo de la biblioteca</title>
+<meta name="theme-color" content="#14304d">
+<style>
+:root{--fondo:#f6f2e9;--tarjeta:#fff;--tinta:#1d2a38;--suave:#5b6877;--borde:#e3dccd;--ok:#2f7d4f;--no:#b4532a;--azul:#14304d}
+@media (prefers-color-scheme:dark){:root{--fondo:#12171d;--tarjeta:#1b232c;--tinta:#eef1f4;--suave:#a5b0bc;--borde:#2c3744;--azul:#0e2238}}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:var(--fondo);color:var(--tinta)}
+header{background:var(--azul);color:#fff;padding:22px 16px 26px;text-align:center}
+header h1{margin:0;font:700 26px Fraunces,Georgia,serif}header p{margin:4px 0 14px;opacity:.8;font-size:14px}
+.buscar{max-width:640px;margin:auto;display:flex;gap:8px}
+.buscar input{flex:1;font-size:17px;padding:13px 16px;border-radius:999px;border:0;outline:3px solid transparent}
+.buscar input:focus{outline-color:#f2a900}
+main{max-width:1100px;margin:auto;padding:14px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+.chip{border:2px solid var(--c,#888);color:var(--tinta);background:var(--tarjeta);border-radius:999px;padding:7px 13px;font-size:14px;cursor:pointer;min-height:40px}
+.chip.on{background:var(--c,#888);color:#fff;font-weight:700}
+.barra{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--suave);font-size:14px;margin-bottom:10px;flex-wrap:wrap}
+.barra label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.libro{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;overflow:hidden;display:flex;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.lomo{position:relative;overflow:hidden;width:62px;flex:none;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;font:700 22px Fraunces,Georgia,serif}
+.lomo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.info{padding:11px 12px;min-width:0;flex:1}
+.t{font-weight:700;font-size:16px;line-height:1.25}.a{color:var(--suave);font-size:14px;margin:2px 0 6px}
+.m{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--suave);margin-bottom:7px}
+.m span{background:color-mix(in srgb,var(--c) 14%,transparent);border-radius:6px;padding:2px 7px}
+.est{display:inline-block;border-radius:999px;padding:4px 11px;font-size:13px;font-weight:700;color:#fff}
+.est.si{background:var(--ok)}.est.no{background:var(--no)}
+.vacio{grid-column:1/-1;text-align:center;padding:40px 10px;border:2px dashed var(--borde);border-radius:14px;color:var(--suave)}
+button.res{margin-top:8px;display:block;border:2px solid var(--no);background:transparent;color:var(--tinta);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:700;cursor:pointer;min-height:40px}
+.fondo{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:14px;z-index:20}
+.caja{background:var(--tarjeta);color:var(--tinta);border-radius:16px;padding:18px;max-width:380px;width:100%}
+.caja h2{margin:0 0 4px;font-size:20px}.caja label{display:block;font-size:14px;margin:10px 0 4px}
+.caja input{width:100%;font-size:18px;padding:11px 12px;border-radius:10px;border:2px solid var(--borde);background:var(--fondo);color:var(--tinta)}
+.caja .fila{display:flex;gap:8px;margin-top:14px}.caja .fila button{flex:1;min-height:44px;border-radius:999px;border:2px solid var(--azul);font-size:15px;font-weight:700;cursor:pointer;background:transparent;color:var(--tinta)}
+.caja .fila .ok{background:var(--azul);color:#fff}.caja .msg{margin-top:10px;font-size:14px;min-height:20px}.caja .msg.e{color:var(--no)}.caja .msg.g{color:var(--ok);font-weight:700}
+footer{text-align:center;color:var(--suave);font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+<header><h1 id="ie">Catálogo de la biblioteca</h1><p>Busca un libro por título, autor o tema</p>
+<div class="buscar"><input id="q" type="search" placeholder="🔎 ¿Qué quieres leer hoy?" autocomplete="off" aria-label="Buscar libros"></div></header>
+<main><div class="chips" id="chips"></div>
+<div class="barra"><span id="cuenta"></span><label><input type="checkbox" id="disp"> Solo disponibles ahora</label></div>
+<div class="grid" id="grid"><div class="vacio">Cargando catálogo…</div></div></main>
+<footer id="pie">Para pedir un libro, acércate al mostrador de la biblioteca.</footer>
+<script src="opac-util.js"></script>
+<script src="opac.js"></script>
+</body>
+</html>

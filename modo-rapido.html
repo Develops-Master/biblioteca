@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Modo rápido · SIGIE</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#14304d">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<!--
+  Deliberadamente NO se cargan aquí Chart.js, xlsx, JsBarcode, qrcode-generator
+  ni tesseract.js: esta página solo necesita el lector de QR por cámara, así
+  arranca más rápido en un celular en pleno recorrido por las aulas.
+
+  El SDK de Firebase SÍ se incluye (igual que en index.html/login.html):
+  detectarAlmacenamiento() prueba primero el servidor local y, si no lo
+  encuentra, prueba Firebase — si el colegio usa Firebase como base de datos
+  (sin servidor local corriendo), esta página necesita el SDK cargado para
+  detectarlo y leer/guardar en la MISMA base de datos que el resto del
+  sistema, no en el almacenamiento del navegador.
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast-wrap" id="toasts"></div>
+<script src="core.js"></script>
+<script src="merge.js"></script>
+<script src="modo-rapido.js"></script>
+</body>
+</html>
